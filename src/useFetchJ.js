@@ -7,6 +7,7 @@ const ACTIONS = {
   MAKE_REQ: 'make-req',
   GET_DATA: 'get-data',
   ERROR: 'error',
+  HAS_NXT_PAGE: 'hasNxtPage',
 };
 const initState = {
   jobs: [],
@@ -25,6 +26,11 @@ const reducer = (state, action) => {
         loading: false,
         error: action.payload.error,
         jobs: [],
+      };
+    case ACTIONS.HAS_NXT_PAGE:
+      return {
+        ...state,
+        isItNxt: true,
       };
 
     default:
@@ -48,6 +54,12 @@ function useFetchJ(data, page) {
           type: ACTIONS.GET_DATA,
           payload: { jobs: res.data.results },
         });
+        console.log(res.data);
+        if (res.data.page < res.data.page_count) {
+          dispatch({
+            type: ACTIONS.HAS_NXT_PAGE,
+          });
+        }
       })
       .catch((e) => {
         if (cancelToken.isCancel(e)) return;
