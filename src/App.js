@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Container } from 'react-bootstrap';
+import { Card, Container } from 'react-bootstrap';
 import JobList from './comp/JobList';
 import FormData from './comp/FormData';
 import JobsPaginations from './comp/JobsPaginations';
@@ -16,23 +16,33 @@ function App() {
     setJoke(jobJokes[Math.floor(Math.random() * 11)]);
   }, []);
 
-  const handleData = (...data) => {
+  const handleData = (e) => {
+    const data = e.target.name;
+    const value = e.target.value;
+    console.log(data, value);
     setPage(1);
-    if (data.length === 0) return;
-    if (data.length === 1) {
-      if (data.join() === 'category') {
-        setDatas((prev) => {
-          return { ...prev, category: data.join() };
-        });
-      }
-    }
+    setDatas((prev) => {
+      return { ...prev, [data]: value };
+    });
   };
-  console.log(datas);
+
   return (
     <div>
       <Container className="my-4">
         <h1>Job Seeker</h1>
-        {loading && <h1> Loading ...</h1>}
+        {loading && (
+          <div
+            className="d-flex align-items-center"
+            style={{ justifyContent: 'space-between' }}
+          >
+            <strong>Loading...</strong>
+            <div
+              className="spinner-border ml-5"
+              role="status"
+              aria-hidden="true"
+            ></div>
+          </div>
+        )}
         {error && <h1> Oops!!</h1>}
         {!loading && (
           <h2
@@ -43,12 +53,25 @@ function App() {
           </h2>
         )}
         {!loading && <FormData datas={datas} handleData={handleData} />}
-        {!loading && (
+        {!loading && jobs.length !== 0 && (
           <JobsPaginations page={page} setPage={setPage} isItNxt={isItNxt} />
         )}
 
-        <JobList jobs={jobs} />
-        {!loading && (
+        {jobs.length !== 0 ? (
+          <JobList jobs={jobs} />
+        ) : !loading ? (
+          <Card>
+            <Card.Title
+              className="p-3"
+              style={{ color: '#0886bd', textAlign: 'center' }}
+            >
+              No Job Found!
+            </Card.Title>
+          </Card>
+        ) : (
+          ''
+        )}
+        {!loading && jobs.length !== 0 && (
           <JobsPaginations page={page} setPage={setPage} isItNxt={isItNxt} />
         )}
       </Container>

@@ -1,32 +1,22 @@
-import { useState } from 'react';
-import { Form, Button, Col } from 'react-bootstrap';
+import { Form, Col } from 'react-bootstrap';
 import { categoryList, companyOption, levelList } from '../sel/companySel';
 
-const companyList = [];
-
 function FormData({ datas, handleData }) {
-  const [category, setcategory] = useState('');
-  const [company, setCompany] = useState('');
-  const [level, setLevel] = useState('');
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(category, company, level);
-    handleData(category);
-  };
   return (
-    <Form className="mb-4" onSubmit={handleSubmit}>
+    <Form className="mb-4">
       <Form.Group>
         <Form.Select
           aria-label="Default select example"
           as={Col}
-          value={category}
-          onChange={(e) => setcategory(e.target.value)}
           name="category"
+          value={datas?.category}
+          onChange={(e) => handleData(e)}
         >
-          <option>Select Category</option>
-          {categoryList.map((cat) => (
-            <option value={cat}>{cat}</option>
+          <option value="default">Select Category</option>
+          {categoryList.map((cat, i) => (
+            <option value={cat} key={i}>
+              {cat}
+            </option>
           ))}
         </Form.Select>
       </Form.Group>
@@ -35,11 +25,11 @@ function FormData({ datas, handleData }) {
         <Form.Select
           aria-label="Default select example"
           as={Col}
-          value={company}
-          onChange={(e) => setCompany(e.target.value)}
           name="company"
+          value={datas?.company}
+          onChange={(e) => handleData(e)}
         >
-          <option>Select Company</option>
+          <option value="default">Select Company</option>
           {companyOption.map((opt) => opt)}
         </Form.Select>
       </Form.Group>
@@ -48,24 +38,18 @@ function FormData({ datas, handleData }) {
         <Form.Select
           aria-label="Default select example"
           as={Col}
-          value={level}
-          onChange={(e) => setLevel(e.target.value)}
           name="level"
+          value={datas?.level}
+          onChange={(e) => handleData(e)}
         >
-          <option>Select Your Level</option>
-          {levelList.map((lvl) => (
-            <option value={lvl}>{lvl}</option>
+          <option value="default">Select Your Level</option>
+          {levelList.map((lvl, i) => (
+            <option value={lvl} key={i}>
+              {lvl}
+            </option>
           ))}
         </Form.Select>
       </Form.Group>
-
-      <Button
-        variant="dark"
-        type="submit"
-        style={{ justifyContent: 'flex-end' }}
-      >
-        Submit
-      </Button>
     </Form>
   );
 }
