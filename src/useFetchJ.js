@@ -54,7 +54,7 @@ function useFetchJ(data, page) {
           type: ACTIONS.GET_DATA,
           payload: { jobs: res.data.results },
         });
-        console.log(res.data);
+        console.log(res);
         if (res.data.page < res.data.page_count) {
           dispatch({
             type: ACTIONS.HAS_NXT_PAGE,
